@@ -7,7 +7,3 @@ panel_iframe:
     require_admin: true
 mqtt:
   broker: http://127.0.0.1:1883
-
-recorder:
-  db_url: mysql://homeassistant:ha_dbdatabasepassword@127.0.0.1:3306/ha_db?charset=utf8
-  purge_keep_days: 30
