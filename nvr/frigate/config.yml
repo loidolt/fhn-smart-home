@@ -1,0 +1,481 @@
+mqtt:
+  host: 192.168.55.10
+  port: 1883
+  topic_prefix: frigate
+
+detectors:
+  # Required: name of the detector
+  coral:
+    # Required: type of the detector
+    # Valid values are 'edgetpu' (requires device property below) and 'cpu'.
+    type: edgetpu
+    # Optional: device name as defined here: https://coral.ai/docs/edgetpu/multiple-edgetpu/#using-the-tensorflow-lite-python-api
+    device: usb
+
+model:
+  # Optional: path to the model (default: automatic based on detector)
+  path: /edgetpu_model.tflite
+  # Optional: path to the labelmap (default: shown below)
+  labelmap_path: /labelmap.txt
+  # Required: Object detection model input width (default: shown below)
+  width: 320
+  # Required: Object detection model input height (default: shown below)
+  height: 320
+
+logger:
+  default: warning
+
+birdseye:
+  enabled: True
+
+ffmpeg:
+  input_args:
+    - -avoid_negative_ts
+    - make_zero
+    - -fflags
+    - +genpts+discardcorrupt
+    - -flags
+    - low_delay
+    - -strict
+    - experimental
+    - -analyzeduration
+    - 1000M
+    - -probesize
+    - 1000M
+    - -rw_timeout
+    - "5000000"
+
+snapshots:
+  enabled: True
+  timestamp: True
+  bounding_box: True
+  retain:
+    default: 60
+
+record:
+  enabled: True
+
+timestamp_style:
+  effect: shadow
+
+objects:
+  track:
+    - person
+    - car
+    - bicycle
+    - motorcycle
+
+cameras:
+  shop_overview_cam:
+    ffmpeg:
+      inputs:
+        - path: http://192.168.55.101/flv?port=1935&app=bcs&stream=channel0_main.bcs&user=admin&password=skeeter12
+          roles:
+            - record
+            - rtmp
+        - path: http://192.168.55.101/flv?port=1935&app=bcs&stream=channel0_ext.bcs&user=admin&password=skeeter12
+          roles:
+            - detect
+    detect:
+      stationary:
+        interval: 0
+        threshold: 50
+      width: 640
+      height: 480
+      fps: 7
+
+  workshop_cam:
+    ffmpeg:
+      inputs:
+        - path: http://192.168.55.102/flv?port=1935&app=bcs&stream=channel0_main.bcs&user=admin&password=skeeter12
+          roles:
+            - record
+            - rtmp
+        - path: http://192.168.55.102/flv?port=1935&app=bcs&stream=channel0_ext.bcs&user=admin&password=skeeter12
+          roles:
+            - detect
+    detect:
+      stationary:
+        interval: 0
+        threshold: 50
+      width: 640
+      height: 480
+      fps: 7
+
+  shop_front_door_cam:
+    ffmpeg:
+      inputs:
+        - path: http://192.168.55.103/flv?port=1935&app=bcs&stream=channel0_main.bcs&user=admin&password=skeeter12
+          roles:
+            - record
+            - rtmp
+        - path: http://192.168.55.103/flv?port=1935&app=bcs&stream=channel0_ext.bcs&user=admin&password=skeeter12
+          roles:
+            - detect
+    detect:
+      stationary:
+        interval: 0
+        threshold: 50
+      width: 640
+      height: 480
+      fps: 7
+
+  shop_right_side_cam:
+    ffmpeg:
+      inputs:
+        - path: http://192.168.55.104/flv?port=1935&app=bcs&stream=channel0_main.bcs&user=admin&password=skeeter12
+          roles:
+            - record
+            - rtmp
+        - path: http://192.168.55.104/flv?port=1935&app=bcs&stream=channel0_ext.bcs&user=admin&password=skeeter12
+          roles:
+            - detect
+    detect:
+      stationary:
+        interval: 0
+        threshold: 50
+      width: 640
+      height: 480
+      fps: 7
+
+  shop_back_door_cam:
+    ffmpeg:
+      inputs:
+        - path: http://192.168.55.105/flv?port=1935&app=bcs&stream=channel0_main.bcs&user=admin&password=skeeter12
+          roles:
+            - record
+            - rtmp
+        - path: http://192.168.55.105/flv?port=1935&app=bcs&stream=channel0_ext.bcs&user=admin&password=skeeter12
+          roles:
+            - detect
+    detect:
+      stationary:
+        interval: 0
+        threshold: 50
+      width: 640
+      height: 480
+      fps: 7
+
+  shop_back_cam:
+    ffmpeg:
+      inputs:
+        - path: http://192.168.55.106/flv?port=1935&app=bcs&stream=channel0_main.bcs&user=admin&password=skeeter12
+          roles:
+            - record
+            - rtmp
+        - path: http://192.168.55.106/flv?port=1935&app=bcs&stream=channel0_ext.bcs&user=admin&password=skeeter12
+          roles:
+            - detect
+    detect:
+      stationary:
+        interval: 0
+        threshold: 50
+      width: 640
+      height: 480
+      fps: 7
+
+  garage_north_west_cam:
+    ffmpeg:
+      inputs:
+        - path: http://192.168.55.107/flv?port=1935&app=bcs&stream=channel0_main.bcs&user=admin&password=skeeter12
+          roles:
+            - record
+            - rtmp
+        - path: http://192.168.55.107/flv?port=1935&app=bcs&stream=channel0_ext.bcs&user=admin&password=skeeter12
+          roles:
+            - detect
+    detect:
+      stationary:
+        interval: 0
+        threshold: 50
+      width: 640
+      height: 480
+      fps: 7
+
+  garage_south_west_cam:
+    ffmpeg:
+      inputs:
+        - path: http://192.168.55.108/flv?port=1935&app=bcs&stream=channel0_main.bcs&user=admin&password=skeeter12
+          roles:
+            - record
+            - rtmp
+        - path: http://192.168.55.108/flv?port=1935&app=bcs&stream=channel0_ext.bcs&user=admin&password=skeeter12
+          roles:
+            - detect
+    detect:
+      stationary:
+        interval: 0
+        threshold: 50
+      width: 640
+      height: 480
+      fps: 7
+
+  garage_cam:
+    ffmpeg:
+      inputs:
+        - path: http://192.168.55.109/flv?port=1935&app=bcs&stream=channel0_main.bcs&user=admin&password=skeeter12
+          roles:
+            - record
+            - rtmp
+        - path: http://192.168.55.109/flv?port=1935&app=bcs&stream=channel0_ext.bcs&user=admin&password=skeeter12
+          roles:
+            - detect
+    detect:
+      stationary:
+        interval: 0
+        threshold: 50
+      width: 640
+      height: 480
+      fps: 7
+
+  house_south_west_cam:
+    ffmpeg:
+      inputs:
+        - path: http://192.168.55.110/flv?port=1935&app=bcs&stream=channel0_main.bcs&user=admin&password=skeeter12
+          roles:
+            - record
+            - rtmp
+        - path: http://192.168.55.110/flv?port=1935&app=bcs&stream=channel0_ext.bcs&user=admin&password=skeeter12
+          roles:
+            - detect
+    detect:
+      stationary:
+        interval: 0
+        threshold: 50
+      width: 640
+      height: 480
+      fps: 7
+
+  house_north_west_cam:
+    ffmpeg:
+      inputs:
+        - path: http://192.168.55.111/flv?port=1935&app=bcs&stream=channel0_main.bcs&user=admin&password=skeeter12
+          roles:
+            - record
+            - rtmp
+        - path: http://192.168.55.111/flv?port=1935&app=bcs&stream=channel0_ext.bcs&user=admin&password=skeeter12
+          roles:
+            - detect
+    detect:
+      stationary:
+        interval: 0
+        threshold: 50
+      width: 640
+      height: 480
+      fps: 7
+
+  scullery_cam:
+    ffmpeg:
+      inputs:
+        - path: http://192.168.55.112/flv?port=1935&app=bcs&stream=channel0_main.bcs&user=admin&password=skeeter12
+          roles:
+            - record
+            - rtmp
+        - path: http://192.168.55.112/flv?port=1935&app=bcs&stream=channel0_ext.bcs&user=admin&password=skeeter12
+          roles:
+            - detect
+    detect:
+      stationary:
+        interval: 0
+        threshold: 50
+      width: 640
+      height: 480
+      fps: 7
+
+  grill_cam:
+    ffmpeg:
+      inputs:
+        - path: http://192.168.55.113/flv?port=1935&app=bcs&stream=channel0_main.bcs&user=admin&password=skeeter12
+          roles:
+            - record
+            - rtmp
+        - path: http://192.168.55.113/flv?port=1935&app=bcs&stream=channel0_ext.bcs&user=admin&password=skeeter12
+          roles:
+            - detect
+    detect:
+      stationary:
+        interval: 0
+        threshold: 50
+      width: 640
+      height: 480
+      fps: 7
+
+  deck_cam:
+    ffmpeg:
+      inputs:
+        - path: http://192.168.55.114/flv?port=1935&app=bcs&stream=channel0_main.bcs&user=admin&password=skeeter12
+          roles:
+            - record
+            - rtmp
+        - path: http://192.168.55.114/flv?port=1935&app=bcs&stream=channel0_ext.bcs&user=admin&password=skeeter12
+          roles:
+            - detect
+    detect:
+      stationary:
+        interval: 0
+        threshold: 50
+      width: 640
+      height: 480
+      fps: 7
+
+  great_room_cam:
+    ffmpeg:
+      inputs:
+        - path: http://192.168.55.115/flv?port=1935&app=bcs&stream=channel0_main.bcs&user=admin&password=skeeter12
+          roles:
+            - record
+            - rtmp
+        - path: http://192.168.55.115/flv?port=1935&app=bcs&stream=channel0_ext.bcs&user=admin&password=skeeter12
+          roles:
+            - detect
+    detect:
+      stationary:
+        interval: 0
+        threshold: 50
+      width: 640
+      height: 480
+      fps: 7
+
+  house_north_east_cam:
+    ffmpeg:
+      inputs:
+        - path: http://192.168.55.116/flv?port=1935&app=bcs&stream=channel0_main.bcs&user=admin&password=skeeter12
+          roles:
+            - record
+            - rtmp
+        - path: http://192.168.55.116/flv?port=1935&app=bcs&stream=channel0_ext.bcs&user=admin&password=skeeter12
+          roles:
+            - detect
+    detect:
+      stationary:
+        interval: 0
+        threshold: 50
+      width: 640
+      height: 480
+      fps: 7
+
+  matt_and_carlis_closet_cam:
+    ffmpeg:
+      inputs:
+        - path: http://192.168.55.117/flv?port=1935&app=bcs&stream=channel0_main.bcs&user=admin&password=skeeter12
+          roles:
+            - record
+            - rtmp
+        - path: http://192.168.55.117/flv?port=1935&app=bcs&stream=channel0_ext.bcs&user=admin&password=skeeter12
+          roles:
+            - detect
+    detect:
+      stationary:
+        interval: 0
+        threshold: 50
+      width: 640
+      height: 480
+      fps: 7
+
+  rec_room_cam:
+    ffmpeg:
+      inputs:
+        - path: http://192.168.55.118/flv?port=1935&app=bcs&stream=channel0_main.bcs&user=admin&password=skeeter12
+          roles:
+            - record
+            - rtmp
+        - path: http://192.168.55.118/flv?port=1935&app=bcs&stream=channel0_ext.bcs&user=admin&password=skeeter12
+          roles:
+            - detect
+    detect:
+      stationary:
+        interval: 0
+        threshold: 50
+      width: 640
+      height: 480
+      fps: 7
+
+  porch_cam:
+    ffmpeg:
+      inputs:
+        - path: http://192.168.55.119/flv?port=1935&app=bcs&stream=channel0_main.bcs&user=admin&password=skeeter12
+          roles:
+            - record
+            - rtmp
+        - path: http://192.168.55.119/flv?port=1935&app=bcs&stream=channel0_ext.bcs&user=admin&password=skeeter12
+          roles:
+            - detect
+    detect:
+      stationary:
+        interval: 0
+        threshold: 50
+      width: 640
+      height: 480
+      fps: 7
+
+  under_stairs_cam:
+    ffmpeg:
+      inputs:
+        - path: http://192.168.55.120/flv?port=1935&app=bcs&stream=channel0_main.bcs&user=admin&password=skeeter12
+          roles:
+            - record
+            - rtmp
+        - path: http://192.168.55.120/flv?port=1935&app=bcs&stream=channel0_ext.bcs&user=admin&password=skeeter12
+          roles:
+            - detect
+    detect:
+      stationary:
+        interval: 0
+        threshold: 50
+      width: 640
+      height: 480
+      fps: 7
+
+  stacie_and_dawsons_closet_cam:
+    ffmpeg:
+      inputs:
+        - path: http://192.168.55.121/flv?port=1935&app=bcs&stream=channel0_main.bcs&user=admin&password=skeeter12
+          roles:
+            - record
+            - rtmp
+        - path: http://192.168.55.121/flv?port=1935&app=bcs&stream=channel0_ext.bcs&user=admin&password=skeeter12
+          roles:
+            - detect
+    detect:
+      stationary:
+        interval: 0
+        threshold: 50
+      width: 640
+      height: 480
+      fps: 7
+
+  kim_and_sams_closet_cam:
+    ffmpeg:
+      inputs:
+        - path: http://192.168.55.122/flv?port=1935&app=bcs&stream=channel0_main.bcs&user=admin&password=skeeter12
+          roles:
+            - record
+            - rtmp
+        - path: http://192.168.55.122/flv?port=1935&app=bcs&stream=channel0_ext.bcs&user=admin&password=skeeter12
+          roles:
+            - detect
+    detect:
+      stationary:
+        interval: 0
+        threshold: 50
+      width: 640
+      height: 480
+      fps: 7
+
+  chris_and_julias_closet_cam:
+    ffmpeg:
+      inputs:
+        - path: http://192.168.55.123/flv?port=1935&app=bcs&stream=channel0_main.bcs&user=admin&password=skeeter12
+          roles:
+            - record
+            - rtmp
+        - path: http://192.168.55.123/flv?port=1935&app=bcs&stream=channel0_ext.bcs&user=admin&password=skeeter12
+          roles:
+            - detect
+    detect:
+      stationary:
+        interval: 0
+        threshold: 50
+      width: 640
+      height: 480
+      fps: 7
