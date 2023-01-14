@@ -3,22 +3,25 @@ services:
   db:
     image: linuxserver/mariadb
     container_name: mariadb
+    restart: unless-stopped
     environment:
-      - PUID=1000
-      - PGID=1000
-      - MYSQL_ROOT_PASSWORD=localonlydatabasepassword
+      MYSQL_ROOT_PASSWORD: mariadbrootpassword
+      MYSQL_DATABASE: ha_db
+      MYSQL_USER: homeassistant
+      MYSQL_PASSWORD: ha_dbdatabasepassword
+      PUID: 1000
+      PGID: 1000
     volumes:
       - ./mariadb:/config
     ports:
-      - 3306:3306
-    restart: unless-stopped
+      - "3306:3306"
 
   adminer:
     image: adminer:latest
     environment:
       - PUID=1000
       - PGID=1000
-      - ADMINER_DEFAULT_SERVER=db
+      - ADMINER_DEFAULT_SERVER=ha_db
     ports:
       - 7070:7070
     restart: unless-stopped
@@ -34,8 +37,8 @@ services:
       - DB_TYPE=mariadb
       - DB_HOST=db
       - DB_PORT=3306
-      - DB_USER=root
-      - DB_PASS=localonlydatabasepassword
+      - DB_USER=homeassistant
+      - DB_PASS=ha_dbdatabasepassword
       - DB_DUMP_FREQ=1440
       - DB_DUMP_BEGIN=+10
       - DB_CLEANUP_TIME=8640
@@ -56,6 +59,7 @@ services:
     ports:
       - 1883:1883
       - 9001:9001
+
       #zigbee2mqtt:
       #container_name: zigbee2mqtt
       #image: koenkk/zigbee2mqtt
@@ -106,3 +110,29 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./esphome:/config
+
+  homeassistant:
+    container_name: hass
+    image: homeassistant/home-assistant
+    volumes:
+      - ./hass-config:/config
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    network_mode: host
+    depends_on:
+      - mariadb
+      - mosquitto
+
+
+  hass-configurator:
+    image: "causticlab/hass-configurator-docker:arm"
+    container_name: hass-configurator
+    restart: always
+    ports:
+      - "3218:3218/tcp"
+    depends_on:
+      - homeassistant
+    volumes:
+      - "./configurator-config:/config"
+      - "./hass-config:/hass-config"
+    user: "${PUID}:${PGID}"
