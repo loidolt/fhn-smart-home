@@ -120,8 +120,8 @@ services:
     restart: unless-stopped
     network_mode: host
     depends_on:
-      - mariadb
-      - mosquitto
+      - db
+      - mqtt
 
 
   hass-configurator:
