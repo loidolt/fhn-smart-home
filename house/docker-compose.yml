@@ -1,5 +1,49 @@
 version: '3.3'
 services:
+  db:
+    image: linuxserver/mariadb
+    container_name: mariadb
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - MYSQL_ROOT_PASSWORD=localonlydatabasepassword
+    volumes:
+      - ./mariadb:/config
+    ports:
+      - 3306:3306
+    restart: unless-stopped
+
+  adminer:
+    image: adminer:latest
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - ADMINER_DEFAULT_SERVER=db
+    ports:
+      - 8080:8080
+    restart: unless-stopped
+
+  db-backup:
+    container_name: db-backup
+    image: tiredofit/db-backup
+    links:
+      - db
+    volumes:
+      - ./backups:/backup
+    environment:
+      - DB_TYPE=mariadb
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASS=localonlydatabasepassword
+      - DB_DUMP_FREQ=1440
+      - DB_DUMP_BEGIN=+10
+      - DB_CLEANUP_TIME=8640
+      - MD5=TRUE
+      - COMPRESSION=XZ
+      - SPLIT_DB=FALSE
+    restart: always
+
   mqtt:
     image: eclipse-mosquitto
     container_name: mqtt
@@ -12,24 +56,23 @@ services:
     ports:
       - 1883:1883
       - 9001:9001
-
-  #zigbee2mqtt:
-    #container_name: zigbee2mqtt
-    #image: koenkk/zigbee2mqtt
-    #depends_on:
-    #  - mqtt
-    #restart: always
-    #volumes:
-    #  - ./zigbee2mqtt/data:/app/data
-    #  - /run/udev:/run/udev:ro
-    #ports:
+      #zigbee2mqtt:
+      #container_name: zigbee2mqtt
+      #image: koenkk/zigbee2mqtt
+      #depends_on:
+      #  - mqtt
+      #restart: always
+      #volumes:
+      #  - ./zigbee2mqtt/data:/app/data
+      #  - /run/udev:/run/udev:ro
+      #ports:
       # Frontend port
-    #  - 8080:8080
-    #environment:
-    #  - TZ=America/Denver
-    #devices:
+      #  - 8080:8080
+      #environment:
+      #  - TZ=America/Denver
+      #devices:
       # Make sure this matched to your adapter location
-    #  - /dev/serial/by-id/usb-Nabu_Casa_SkyConnect_v1.0_528d740fb625ec119491fd87a8a1c857-if00-port0:/dev/ttyACM0
+      #  - /dev/serial/by-id/usb-Nabu_Casa_SkyConnect_v1.0_528d740fb625ec119491fd87a8a1c857-if00-port0:/dev/ttyACM0
 
   zwavejs2mqtt:
     container_name: zwavejs2mqtt
@@ -49,3 +92,17 @@ services:
     ports:
       - '8091:8091' # port for web interface
       - '3000:3000' # port for zwave-js websocket server
+
+  esphome:
+    container_name: esphome
+    image: esphome/esphome
+    restart: always
+    environment:
+      - TZ=America/Denver
+      - ESPHOME_DASHBOARD_USE_PING=true
+    ports:
+      - 6052:6052
+      - 6123:6123
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./esphome:/config
