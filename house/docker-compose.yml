@@ -135,4 +135,4 @@ services:
     volumes:
       - "./configurator-config:/config"
       - "./hass-config:/hass-config"
-    user: "${PUID}:${PGID}"
+    user: 1000:1000
