@@ -1,52 +1,5 @@
 version: '3.3'
 services:
-  db:
-    image: linuxserver/mariadb
-    container_name: mariadb
-    restart: unless-stopped
-    environment:
-      MYSQL_ROOT_PASSWORD: mariadbrootpassword
-      MYSQL_DATABASE: ha_db
-      MYSQL_USER: homeassistant
-      MYSQL_PASSWORD: ha_dbdatabasepassword
-      PUID: 1000
-      PGID: 1000
-    volumes:
-      - ./mariadb:/config
-    ports:
-      - "3306:3306"
-
-  adminer:
-    image: adminer:latest
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - ADMINER_DEFAULT_SERVER=ha_db
-    ports:
-      - 7070:7070
-    restart: unless-stopped
-
-  db-backup:
-    container_name: db-backup
-    image: tiredofit/db-backup
-    links:
-      - db
-    volumes:
-      - ./backups:/backup
-    environment:
-      - DB_TYPE=mariadb
-      - DB_HOST=db
-      - DB_PORT=3306
-      - DB_USER=homeassistant
-      - DB_PASS=ha_dbdatabasepassword
-      - DB_DUMP_FREQ=1440
-      - DB_DUMP_BEGIN=+10
-      - DB_CLEANUP_TIME=8640
-      - MD5=TRUE
-      - COMPRESSION=XZ
-      - SPLIT_DB=FALSE
-    restart: always
-
   mqtt:
     image: eclipse-mosquitto
     container_name: mqtt
@@ -120,9 +73,7 @@ services:
     restart: unless-stopped
     network_mode: host
     depends_on:
-      - db
       - mqtt
-
 
   hass-configurator:
     image: "causticlab/hass-configurator-docker:arm"
