@@ -1,9 +1,3 @@
 default_config:
-panel_iframe:
-  configurator:
-    title: Configurator
-    icon: mdi:wrench
-    url: http://127.0.0.1:3218/
-    require_admin: true
 mqtt:
   broker: http://127.0.0.1:1883
