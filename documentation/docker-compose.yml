@@ -26,6 +26,7 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
+      - GROUPS=1000
       - TZ=America/Denver
     volumes:
       - /appdata/dokuwiki/config:/config
