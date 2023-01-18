@@ -20,16 +20,16 @@ services:
       retries: 3
       start_period: 40s
 
-  wiki:
-    container_name: wikijs
-    image: requarks/wiki
-    ports:
-      - 3000:3000
-    volumes:
-      - /appdata/Wiki/database.sqlite:/wiki/database.sqlite
+  dokuwiki:
+    image: lscr.io/linuxserver/dokuwiki:latest
+    container_name: dokuwiki
     environment:
-      - UID=1000
-      - GID=1000
-      - DB_TYPE=sqlite
-      - DB_FILEPATH=/wiki/database.sqlite
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Denver
+    volumes:
+      - /appdata/dokuwiki/config:/config
+    ports:
+      - 80:80
+      - 443:443 #optional
     restart: unless-stopped
