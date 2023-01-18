@@ -1,0 +1,35 @@
+version: "3.8"
+services:
+  dashy:
+    container_name: dashy
+    image: lissy93/dashy
+    ports:
+      - 4000:80
+    volumes:
+      - /appdata/Dashy/conf.yml:/app/public/conf.yml
+      - /appdata/Dashy/icons:/app/public/item-icons
+    environment:
+      - NODE_ENV=production
+      - UID=1000
+      - GID=1000
+    restart: unless-stopped
+    healthcheck:
+      test: [ 'CMD', 'node', '/app/services/healthcheck' ]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  wiki:
+    container_name: wikijs
+    image: requarks/wiki
+    ports:
+      - 3000:3000
+    volumes:
+      - /appdata/Wiki/database.sqlite:/wiki/database.sqlite
+    environment:
+      - UID=1000
+      - GID=1000
+      - DB_TYPE=sqlite
+      - DB_FILEPATH=/wiki/database.sqlite
+    restart: unless-stopped
