@@ -6,8 +6,8 @@ services:
     ports:
       - 4000:80
     volumes:
-      - /appdata/Dashy/conf.yml:/app/public/conf.yml
-      - /appdata/Dashy/icons:/app/public/item-icons
+      - /appdata/dashy/conf.yml:/app/public/conf.yml
+      - /appdata/dashy/icons:/app/public/item-icons
     environment:
       - NODE_ENV=production
       - UID=1000
@@ -28,7 +28,7 @@ services:
       - PGID=1000
       - TZ=America/Denver
     volumes:
-      - /appdata/Dokuwiki/config:/config
+      - /appdata/dokuwiki/config:/config
     ports:
       - 80:80
       - 443:443 #optional
