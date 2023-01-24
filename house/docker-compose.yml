@@ -1,18 +1,5 @@
 version: '3.3'
 services:
-  mqtt:
-    image: eclipse-mosquitto
-    container_name: mqtt
-    restart: unless-stopped
-    environment:
-      - PUID=1000
-      - PGID=1000
-    volumes:
-      - /home/pi/mqtt:/mosquitto/:rw
-    ports:
-      - 1883:1883
-      - 9001:9001
-
   zigbee2mqtt:
     container_name: zigbee2mqtt
     image: koenkk/zigbee2mqtt
@@ -49,41 +36,3 @@ services:
     ports:
       - '8091:8091' # port for web interface
       - '3000:3000' # port for zwave-js websocket server
-
-  esphome:
-    container_name: esphome
-    image: esphome/esphome
-    restart: always
-    environment:
-      - TZ=America/Denver
-      - ESPHOME_DASHBOARD_USE_PING=true
-    ports:
-      - 6052:6052
-      - 6123:6123
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - /home/pi/esphome:/config
-
-  homeassistant:
-    container_name: hass
-    image: homeassistant/home-assistant
-    volumes:
-      - /home/pi/hass-config:/config
-      - /etc/localtime:/etc/localtime:ro
-    restart: unless-stopped
-    network_mode: host
-    depends_on:
-      - mqtt
-
-  hass-configurator:
-    image: "causticlab/hass-configurator-docker:arm"
-    container_name: hass-configurator
-    restart: always
-    ports:
-      - "3218:3218/tcp"
-    depends_on:
-      - homeassistant
-    volumes:
-      - /home/pi/configurator-config:/config
-      - /home/pi/hass-config:/hass-config
-    user: 1000:1000

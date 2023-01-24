@@ -1,0 +1,14 @@
+version: '3.3'
+services:
+  mqtt:
+    image: eclipse-mosquitto
+    container_name: mqtt
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - /share/CACHEDEV1_DATA/Container/mosquitto:/mosquitto/:rw
+    ports:
+      - 1883:1883
+      - 9001:9001

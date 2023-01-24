@@ -1,0 +1,37 @@
+version: '3.3'
+services:
+  esphome:
+    container_name: esphome
+    image: esphome/esphome
+    restart: always
+    environment:
+      - TZ=America/Denver
+      - ESPHOME_DASHBOARD_USE_PING=true
+    ports:
+      - 6052:6052
+      - 6123:6123
+    volumes:
+      - /share/CACHEDEV1_DATA/Container/esphome:/config
+      - /etc/localtime:/etc/localtime:ro
+
+  homeassistant:
+    container_name: hass
+    image: homeassistant/home-assistant
+    volumes:
+      - /share/CACHEDEV1_DATA/Container/homeassistant:/config
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    network_mode: host
+
+  hass-configurator:
+    image: "causticlab/hass-configurator-docker:arm"
+    container_name: hass-configurator
+    restart: always
+    ports:
+      - "3218:3218/tcp"
+    depends_on:
+      - homeassistant
+    volumes:
+      - /share/CACHEDEV1_DATA/Container/configurator-config:/config
+      - /share/CACHEDEV1_DATA/Container/homeassistant:/hass-config
+    user: 1000:1000
