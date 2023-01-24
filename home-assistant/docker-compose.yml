@@ -17,14 +17,19 @@ services:
   homeassistant:
     container_name: homeassistant
     image: homeassistant/home-assistant
+    network_mode: host
+    restart: unless-stopped
+    ports:
+      - 8123:8123
     volumes:
       - /share/CACHEDEV1_DATA/Container/homeassistant:/config
       - /etc/localtime:/etc/localtime:ro
     environment:
       - TZ=America/Denver
       - DISABLE_JEMALLOC=true
-    restart: unless-stopped
-    network_mode: host
+      - JEMALLOC_DISABLE=true
+      - PUID=1000
+      - PGID=1000
 
   hass-configurator:
     image: "causticlab/hass-configurator-docker:arm"
