@@ -15,11 +15,14 @@ services:
       - /etc/localtime:/etc/localtime:ro
 
   homeassistant:
-    container_name: hass
+    container_name: homeassistant
     image: homeassistant/home-assistant
     volumes:
       - /share/CACHEDEV1_DATA/Container/homeassistant:/config
       - /etc/localtime:/etc/localtime:ro
+    environment:
+      - TZ=America/Denver
+      - DISABLE_JEMALLOC=true
     restart: unless-stopped
     network_mode: host
 
