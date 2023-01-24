@@ -3,7 +3,7 @@ services:
   kiwix-serve:
     image: kiwix/kiwix-serve
     volumes:
-      - /share/CACHEDEV1_DATA/Kiwix:/data
+      - /share/CACHEDEV1_DATA/Kiwix/data:/data
     ports:
       - '5000:80'
     command:
