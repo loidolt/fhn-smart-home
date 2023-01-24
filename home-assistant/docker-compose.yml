@@ -16,10 +16,10 @@ services:
 
   homeassistant:
     container_name: homeassistant
-    image: homeassistant/home-assistant:2022.6.7
+    image: homeassistant/home-assistant
     network_mode: host
     privileged: true
-    restart: unless-stopped
+    restart: always
     ports:
       - 8123:8123
     volumes:
@@ -32,15 +32,17 @@ services:
       - PUID=1000
       - PGID=1000
 
-  hass-configurator:
-    image: "causticlab/hass-configurator-docker:arm"
-    container_name: hass-configurator
+  vscode:
+    container_name: vscode
+    image: linuxserver/code-server:3.12.0
     restart: always
-    ports:
-      - "3218:3218/tcp"
-    depends_on:
-      - homeassistant
     volumes:
-      - /share/CACHEDEV1_DATA/Container/configurator-config:/config
-      - /share/CACHEDEV1_DATA/Container/homeassistant:/hass-config
-    user: 1000:1000
+      - '/share/CACHEDEV1_DATA/Container/vscode:/config'
+      - '/share/CACHEDEV1_DATA/Container/homeassistant/:/homeassistant'
+      - '/share/CACHEDEV1_DATA/Container/esphome/:/esphome'
+    environment:
+      - 'DOCKER_MODS=ghcr.io/aneisch/code-server-home-assistant'
+      - 'HOMEASSISTANT_URL=http://127.0.0.1:8123'
+      - PUID=1000
+      - PGID=1000
+      - HOMEASSISTANT_TOKEN=XXX
