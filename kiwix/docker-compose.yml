@@ -1,6 +1,7 @@
 version: '3'
 services:
   kiwix-serve:
+    container_name: kiwix-serve
     image: kiwix/kiwix-serve
     volumes:
       - /share/CACHEDEV1_DATA/Kiwix/data:/data
