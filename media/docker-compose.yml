@@ -8,4 +8,8 @@ services:
     ports:
       - '5000:80'
     command:
-      wikipedia_en_top_maxi_2021-08.zim
+      wikipedia_en_all_maxi_2022-05.zim
+      wikibooks_en_all_maxi_2021-03.zim
+      wikiversity_en_all_maxi_2021-03.zim
+
+  ##TODO: add Jellyfin
