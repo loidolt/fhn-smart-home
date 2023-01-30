@@ -9,7 +9,7 @@ services:
       - TZ=America/Denver # Your current timezone
     volumes:
       - /share/CACHEDEV1_DATA/Container/transmission:/config # Change this to your docker config folder
-      - /share/CACHEDEV1_DATA/Container/transmission/torrents:/watch
+      - /share/CACHEDEV1_DATA/Downloads/transmission/watch:/watch
       - /share/CACHEDEV1_DATA/Downloads/transmission:/download # Change this to your download folder
       - /share/CACHEDEV1_DATA/Kiwix:/kiwix
     ports:
