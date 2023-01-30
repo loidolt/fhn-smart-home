@@ -12,7 +12,7 @@ services:
       - NODE_ENV=production
       - UID=1000
       - GID=1000
-    restart: unless-stopped
+    restart: always
     healthcheck:
       test: [ 'CMD', 'node', '/app/services/healthcheck' ]
       interval: 1m30s
@@ -33,4 +33,4 @@ services:
     ports:
       - 3000:80
       - 3443:443 #optional
-    restart: unless-stopped
+    restart: always

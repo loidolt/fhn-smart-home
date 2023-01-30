@@ -16,7 +16,7 @@ services:
       - 5091:9091 # Web UI port
       - 51413:51413 # Torrent port (TCP)
       - 51413:51413/udp # Torrent port (UDP)
-    restart: unless-stopped # This makes sure that the application restarts when it crashes
+    restart: always
     
   kiwix-serve:
     container_name: kiwix-serve
@@ -25,6 +25,7 @@ services:
       - /share/CACHEDEV1_DATA/Kiwix/data:/data
     ports:
       - '5000:8080'
+    restart: always
     command:
       wikipedia_en_all_maxi_2022-05.zim
 
