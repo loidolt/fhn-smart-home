@@ -3,8 +3,6 @@ services:
   zigbee2mqtt:
     container_name: zigbee2mqtt
     image: koenkk/zigbee2mqtt
-    depends_on:
-      - mqtt
     restart: always
     volumes:
       - /home/pi/zigbee2mqtt/data:/app/data
@@ -21,8 +19,6 @@ services:
   zwavejs2mqtt:
     container_name: zwavejs2mqtt
     image: zwavejs/zwavejs2mqtt:latest
-    depends_on:
-      - mqtt
     restart: always
     tty: true
     stop_signal: SIGINT
