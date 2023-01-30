@@ -10,7 +10,7 @@ services:
     volumes:
       - /share/CACHEDEV1_DATA/Container/transmission:/config # Change this to your docker config folder
       - /share/CACHEDEV1_DATA/Downloads/transmission/watch:/watch
-      - /share/CACHEDEV1_DATA/Downloads/transmission:/download # Change this to your download folder
+      - /share/CACHEDEV1_DATA/Downloads/transmission:/downloads # Change this to your downloads folder
       - /share/CACHEDEV1_DATA/Kiwix:/kiwix
     ports:
       - 5091:9091 # Web UI port
