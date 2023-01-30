@@ -11,3 +11,5 @@ services:
       - /share/CACHEDEV1_DATA/Container/mosquitto:/mosquitto/:rw
     ports:
       - 1883:1883
+
+  ##TODO add database backup for nas mysql database
