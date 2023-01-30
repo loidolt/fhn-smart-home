@@ -2,7 +2,7 @@ homeassistant: true
 permit_join: false
 mqtt:
   base_topic: zigbee2mqtt-shop
-  server: mqtt://192.168.55.10:1883
+  server: mqtt://192.168.1.15:1883
 serial:
   port: /dev/ttyACM0
 frontend:
